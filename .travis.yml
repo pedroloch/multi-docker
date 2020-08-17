@@ -8,3 +8,14 @@ before_install:
 
 script:
   - docker run -e CI=true pedroloch/multi-docker npm test
+
+after_success:
+  - docker build -t pedroloch/multi-client ./client
+  - docker build -t pedroloch/multi-nginx ./nginx
+  - docker build -t pedroloch/multi-server ./server
+  - docker build -t pedroloch/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push pedroloch/multi-client
+  - docker push pedroloch/multi-nginx
+  - docker push pedroloch/multi-server
+  - docker push pedroloch/multi-worker
