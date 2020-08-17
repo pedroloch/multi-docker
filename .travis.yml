@@ -1,0 +1,10 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t pedroloch/multi-docker -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true pedroloch/multi-docker npm test
